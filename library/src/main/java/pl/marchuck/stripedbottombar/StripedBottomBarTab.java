@@ -129,11 +129,21 @@ public class StripedBottomBarTab extends LinearLayout {
     private void prepareStripe() {
         stripeView = new View(getContext());
         stripeView.setBackgroundColor(stripeViewColor);
-        int stripeHeight = 20;
+        int stripeHeight = determineStripeHeight();
+
         addView(stripeView, 0, new LinearLayout.LayoutParams(-1, stripeHeight));
         if (!stripeViewEnabled) {
             hideStripeView();
         }
+    }
+
+    private int determineStripeHeight() {
+        int densityDpi = getResources().getDisplayMetrics().densityDpi;
+
+        if (densityDpi <= 200) {
+            return 10;
+        }
+        return 20;
     }
 
     @VisibleForTesting
@@ -588,26 +598,26 @@ public class StripedBottomBarTab extends LinearLayout {
         setTopPaddingAnimated(iconView.getPaddingTop(), padding);
 
         ViewPropertyAnimatorCompat titleAnimator = ViewCompat.animate(titleView)
-                                                             .setDuration(ANIMATION_DURATION)
-                                                             .scaleX(scale)
-                                                             .scaleY(scale);
+                .setDuration(ANIMATION_DURATION)
+                .scaleX(scale)
+                .scaleY(scale);
         titleAnimator.alpha(alpha);
         titleAnimator.start();
     }
 
     private void animateIconScale(float scale) {
         ViewCompat.animate(iconView)
-                  .setDuration(ANIMATION_DURATION)
-                  .scaleX(scale)
-                  .scaleY(scale)
-                  .start();
+                .setDuration(ANIMATION_DURATION)
+                .scaleX(scale)
+                .scaleY(scale)
+                .start();
     }
 
     private void animateIcon(float alpha, float scale) {
         ViewCompat.animate(iconView)
-                  .setDuration(ANIMATION_DURATION)
-                  .alpha(alpha)
-                  .start();
+                .setDuration(ANIMATION_DURATION)
+                .alpha(alpha)
+                .start();
 
         if (isTitleless && type == Type.SHIFTING) {
             animateIconScale(scale);
