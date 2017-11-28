@@ -15,6 +15,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.widget.AppCompatImageView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -140,7 +141,7 @@ public class StripedBottomBarTab extends LinearLayout {
     private int determineStripeHeight() {
         int densityDpi = getResources().getDisplayMetrics().densityDpi;
 
-        if (densityDpi <= 200) {
+        if (densityDpi <= 320) {
             return 10;
         }
         return 20;
