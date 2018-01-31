@@ -23,6 +23,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.concurrent.Callable;
+
 import pl.marchuck.stripebottombar.R;
 
 /*
@@ -80,6 +82,8 @@ public class StripedBottomBarTab extends LinearLayout {
     private int stripeViewColor = Color.TRANSPARENT;
     private boolean stripeViewEnabled;
     private ToggleVisibilityCallback toggleVisibilityCallback;
+
+    public static Callable<Integer> bottomBarHeightCallable = null;
 
     StripedBottomBarTab(Context context) {
         super(context);
@@ -140,6 +144,53 @@ public class StripedBottomBarTab extends LinearLayout {
 
     private int determineStripeHeight() {
         int densityDpi = getResources().getDisplayMetrics().densityDpi;
+//        Log.d(TAG, "determineStripeHeight: " + densityDpi);
+
+        if (bottomBarHeightCallable != null) {
+            try {
+                return bottomBarHeightCallable.call();
+            } catch (Exception e) {
+                bottomBarHeightCallable = null;
+                return determineStripeHeight();
+            }
+        }
+
+        switch (densityDpi) {
+            case DisplayMetrics.DENSITY_LOW:
+                // LDPI
+                //  System.out.println("DENSITY_LOW");
+                break;
+
+            case DisplayMetrics.DENSITY_MEDIUM:
+                //  System.out.println("DENSITY_MEDIUM");
+                // MDPI
+                break;
+
+            case DisplayMetrics.DENSITY_TV:
+            case DisplayMetrics.DENSITY_HIGH:
+                // System.out.println("DENSITY_HIGH");
+                // HDPI
+                break;
+
+            case DisplayMetrics.DENSITY_XHIGH:
+            case DisplayMetrics.DENSITY_280:
+                // System.out.println("DENSITY_XHIGH");
+                return 5;
+
+            case DisplayMetrics.DENSITY_XXHIGH:
+            case DisplayMetrics.DENSITY_360:
+            case DisplayMetrics.DENSITY_400:
+            case DisplayMetrics.DENSITY_420:
+//                System.out.println("DENSITY_XXHIGH");
+                // XXHDPI
+                break;
+
+            case DisplayMetrics.DENSITY_XXXHIGH:
+            case DisplayMetrics.DENSITY_560:
+                //System.out.println("DENSITY_XXXHIGH");
+                // XXXHDPI
+                break;
+        }
 
         if (densityDpi <= 320) {
             return 10;
